@@ -8,7 +8,7 @@ on:
     branches: [ main ]
     paths:
       - apis/userprofile/**
-      - .github/workflows/node.js.yml
+      - .github/workflow/node.js.yml
   pull_request:
     branches: [ main ]
     paths:
@@ -17,9 +17,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
       with:
-        node-version: '12'
+        node-version: '14'
         cache: 'npm'
+        cache-dependency-path: subdir/package-lock.json
     - run: npm install && npm test
