@@ -22,6 +22,8 @@ jobs:
         shell: bash
         working-directory: apis/userprofile
     steps:
+    - uses: actions/checkout@v2
+    - name: something that might fail
       run: exit 1
     - name: Create Issue on Failed workflow
       if: ${{ failure() }}
@@ -36,3 +38,4 @@ jobs:
           Workflow name - `${{ github.workflow }}`
           Job -           `${{ github.job }}`
           status -        `${{ job.status }}`
+        assignees: SomeUsername,AnotherUsername
