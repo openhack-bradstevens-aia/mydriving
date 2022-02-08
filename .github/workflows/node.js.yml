@@ -28,7 +28,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        node-version: '14'
+        node-version: '12'
         cache: 'npm'
-        cache-dependency-path: subdir/package-lock.json
+        # cache-dependency-path: subdir/package-lock.json
     - run: npm install && npm test
