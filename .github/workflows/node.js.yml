@@ -23,19 +23,8 @@ jobs:
         working-directory: apis/userprofile
     steps:
     - uses: actions/checkout@v2
-    - name: something that might fail
-      run: exit 1
-    - name: Create Issue on Failed workflow
-      if: ${{ failure() }}
-      uses: dacbd/create-issue-action@main
       with:
-        token: ${{ github.token }}
-        title: Action workflow failed.
-        body: |
-          ### Context
-          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-          [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
-          Workflow name - `${{ github.workflow }}`
-          Job -           `${{ github.job }}`
-          status -        `${{ job.status }}`
-        assignees: SomeUsername,AnotherUsername
+        node-version: '12'
+        cache: 'npm'
+    - run: npm install 
+    - run: npm test
