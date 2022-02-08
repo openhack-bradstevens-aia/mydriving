@@ -16,7 +16,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -26,12 +25,10 @@ jobs:
       matrix:
         node-version: [12.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '14'
         cache: 'npm'
-    - run: npm install && npm run build --if-present
-    - run: npm run test
+        cache-dependency-path: subdir/package-lock.json
+    - run: npm install && npm test
