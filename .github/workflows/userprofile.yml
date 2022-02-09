@@ -45,7 +45,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'openhack95e8pkj0userprofile'
-        images: "superawesome2.azurecr.io/mydriveway/api-userprofile:${{ github.RUN_NUMBER }}"
+        images: "superawesome2.azurecr.io/mydriveway/api-userprofile:31"
         # slot-name: staging
     
     - name: Show App Service Details

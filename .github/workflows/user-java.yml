@@ -53,7 +53,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'openhack95e8pkj0userjava'
-        images: 'superawesome2.azurecr.io/mydriveway/api-user-java:${{ github.sha }}'
+        images: 'superawesome2.azurecr.io/mydriveway/api-user-java:9'
         # slot-name: staging
 
     - name: Create Issue on Failed Workflow
