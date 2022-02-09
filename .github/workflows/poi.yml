@@ -1,12 +1,12 @@
 name: poi
 on:
   push:
-    branches: [ main pb_** ]
+    branches: [ main pb_* ]
     paths:
       - apis/poi/**
       - .github/workflows/poi.yml
   pull_request:
-    branches: [ main pb_** ]
+    branches: [ main pb_* ]
     paths:
       - apis/poi/**
       - .github/workflows/poi.yml
