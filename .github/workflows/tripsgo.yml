@@ -1,15 +1,13 @@
-name: tripsgo
+name: Go
 
 on:
   push:
     branches: [ main ]
     paths:
-      - apis/trips/**
-      - .github/workflows/tripsgo.yml
+     - apis/trips/**
+     - .github/workflows/tripsgo.yml
   pull_request:
     branches: [ main ]
-    paths:
-      - apis/trips/**
 
 jobs:
 
@@ -27,8 +25,17 @@ jobs:
       with:
         go-version: 1.17
 
-    #- name: Buildx
-      #run: docker login
+    - name: Build
+      run: go get
+      
+    - name: Docker Login
+      run: docker login superawesome2.azurecr.io --username=${{SECRETS.CONTAINER_USER}} --password=${{SECRETS.CONTAINER_SECRET}}
+    
+    - name: Docker build
+      run: docker build -t superawesome2.azurecr.io/tripsgo:${{GITHUB.RUN_NUMBER}} .
+      
+    - name: Docker push
+      run: docker push superawesome2.azurecr.io/tripsgo:${{GITHUB.RUN_NUMBER}}
 
     - name: Test
       run: go test ./tripsgo -run Unit
