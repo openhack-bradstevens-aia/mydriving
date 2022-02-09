@@ -49,4 +49,5 @@ jobs:
       with:
         app-name: 'openhack95e8pkj0trips'
         images: "superawesome2.azurecr.io/mydriveway/api-tripsgo:20"  #Using tag 20 temporarily
+        slot-name: staging
     
