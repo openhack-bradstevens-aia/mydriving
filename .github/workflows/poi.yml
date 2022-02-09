@@ -43,10 +43,15 @@ jobs:
       
     # - name: Docker push
     #   run: docker push superawesome2.azurecr.io/mydriveway/api-poi:${{GITHUB.RUN_NUMBER}}
-
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
     - name: acr build to azure
       uses: azure/docker-login@v1
       with:
+        registry: superawesome2.azurecr.io
         login-server: superawesome2.azurecr.io
         username: ${{ secrets.CONTAINER_USER }}
         password: ${{ secrets.CONTAINER_SECRET }}
