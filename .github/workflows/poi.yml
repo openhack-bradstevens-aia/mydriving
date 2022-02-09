@@ -56,7 +56,7 @@ jobs:
         username: ${{ secrets.CONTAINER_USER }}
         password: ${{ secrets.CONTAINER_SECRET }}
     - run: |
-        docker build /apis/userprofile/Dockerfile superawesome2.azurecr.io/mydriveway/api-poi:${{GITHUB.RUN_NUMBER}}
+        docker build . superawesome2.azurecr.io/mydriveway/api-poi:${{GITHUB.RUN_NUMBER}}
         docker push superawesome2.azurecr.io/mydriveway/api-poi:${{GITHUB.RUN_NUMBER}}
 
     - name: .NET Test
