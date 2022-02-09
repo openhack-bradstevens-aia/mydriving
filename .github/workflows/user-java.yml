@@ -30,7 +30,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B package --file pom.xml && mvn test
     # force error to force issue creation on failure
     # - run: exit 1
     - name: Create Issue on Failed Workflow
