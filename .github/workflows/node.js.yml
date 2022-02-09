@@ -54,3 +54,4 @@ jobs:
         azcliversion: 2.30.0
         inlineScript: |
           az account show
+          az version
