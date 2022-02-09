@@ -38,7 +38,7 @@ jobs:
       run: docker tag mydriveway/api-tripsgo mydriveway/api-tripsgo:${{GITHUB.RUN_NUMBER}} 
 
     - name: Docker push
-      run: docker push mydriveway/api-tripsgo:${{GITHUB.RUN_NUMBER}}
+      run: docker push superawesome2.azurecr.io/mydriveway/api-tripsgo:${{GITHUB.RUN_NUMBER}}
 
     - name: Test
       run: go test ./tripsgo -run Unit
