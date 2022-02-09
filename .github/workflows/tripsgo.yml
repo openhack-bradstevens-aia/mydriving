@@ -5,7 +5,7 @@ on:
     branches: [ main ]
     paths:
       - apis/trips/**
-      - .github/workflows/go.yml
+      - .github/workflows/tripsgo.yml
   pull_request:
     branches: [ main ]
     paths:
