@@ -1,0 +1,18 @@
+az ad sp create-for-rbac \
+    --name "userprofile" \
+    --role contributor \
+    --scopes /subscriptions/bad2e729-727a-4500-8b29-ba4835209f8b \
+    --sdk-auth
+
+{
+  "clientId": "85b2a83f-d5c1-4327-9f29-7bed64c3e891",
+  "clientSecret": "D7Z6_ER5Lu2oVOuB3MM0KjbLiFz3.56Ajy",
+  "subscriptionId": "bad2e729-727a-4500-8b29-ba4835209f8b",
+  "tenantId": "2a8e5f4d-3c54-409f-a064-627f4914ad91",
+  "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+  "resourceManagerEndpointUrl": "https://management.azure.com/",
+  "activeDirectoryGraphResourceId": "https://graph.windows.net/",
+  "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+  "galleryEndpointUrl": "https://gallery.azure.com/",
+  "managementEndpointUrl": "https://management.core.windows.net/"
+}
