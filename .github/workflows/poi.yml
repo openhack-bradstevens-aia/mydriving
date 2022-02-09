@@ -21,6 +21,7 @@ jobs:
         dotnet-version: '3.1.202'
     - name: Add Code Coverage Tools
       working-directory: apis/poi/tests/UnitTests
+      
       run: dotnet add package coverlet.msbuild
     - name: Install dependencies
       run: dotnet restore apis/poi/web/*.csproj
@@ -32,10 +33,11 @@ jobs:
       run: docker login superawesome2.azurecr.io --username=${{SECRETS.CONTAINER_USER}} --password=${{SECRETS.CONTAINER_SECRET}}
     
     - name: Docker build
-      run: docker build -t superawesome2.azurecr.io/mydriveway/poi-api:${{GITHUB.RUN_NUMBER}} .
+      working-directory: apis/poi/web
+      run: docker build -t mydriveway/poi-api:${{GITHUB.RUN_NUMBER}} .
       
     - name: Docker push
-      run: docker push superawesome2.azurecr.io/mydriveway/poi-api:${{GITHUB.RUN_NUMBER}}
+      run: docker push mydriveway/poi-api:${{GITHUB.RUN_NUMBER}}
 
     - name: .NET Test
       run: dotnet test --no-restore --verbosity normal apis/poi/tests/UnitTests  /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov
