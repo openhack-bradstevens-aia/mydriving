@@ -1,4 +1,4 @@
-name: poi testing.NET
+name: poi
 on:
   push:
     branches: [ main ]
