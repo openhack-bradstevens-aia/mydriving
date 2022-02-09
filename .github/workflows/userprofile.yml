@@ -60,7 +60,7 @@ jobs:
     - name : Deploy App Service 
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'staging (openhack95e8pkj0userprofile/staging)'
+        app-name: 'openhack95e8pkj0userprofile'
         images: "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}"
     
     - name: Show App Service Details
