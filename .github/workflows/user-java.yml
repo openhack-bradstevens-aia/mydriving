@@ -47,7 +47,6 @@ jobs:
         azcliversion: 2.30.0
         inlineScript: |
           cd apis/user-java
-          ls -la
           az acr build --image "mydriveway/api-user-java:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
 
     - name: Deploy to App Service
