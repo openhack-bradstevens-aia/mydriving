@@ -37,7 +37,7 @@ jobs:
     
     - name: Docker build
       working-directory: apis/poi/web
-      run: docker build -t mydriveway/poi-api:${{GITHUB.RUN_NUMBER}} .
+      run: docker build -t superawesome2.azurecr.io/mydriveway/poi-api:${{GITHUB.RUN_NUMBER}} .
       
     - name: Docker push
       run: docker push superawesome2.azurecr.io/mydriveway/poi-api:${{GITHUB.RUN_NUMBER}}
