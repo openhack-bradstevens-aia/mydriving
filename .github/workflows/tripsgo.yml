@@ -29,13 +29,13 @@ jobs:
       run: go get
       
     - name: Docker Login
-      run: docker login superawesome2.azurecr.io --username=superawesome2 --password=hNYNnMrzj/tDjybZtWTX2h33Zr9zDeMo
+      run: docker login superawesome2.azurecr.io --username=${{SECRET.CONTAINER_USER}} --password=${{SECRET.CONTAINER_SECRET}}
     
     - name: Docker build
-      run: docker build -t superawesome2.azurecr.io/tripsgo:v1 .
+      run: docker build -t superawesome2.azurecr.io/tripsgo:${{GITHUB.RUN_NUMBER}} .
       
     - name: Docker push
-      run: docker push superawesome2.azurecr.io/tripsgo:v1
+      run: docker push superawesome2.azurecr.io/tripsgo:${{GITHUB.RUN_NUMBER}}
 
     - name: Test
       run: go test ./tripsgo -run Unit
