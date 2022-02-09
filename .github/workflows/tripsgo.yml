@@ -30,9 +30,9 @@ jobs:
       
     - name: Docker Login
       run: docker login superawesome2.azurecr.io --username=superawesome2 --password=hNYNnMrzj/tDjybZtWTX2h33Zr9zDeMo
-      
+    
     - name: Docker build
-      run: docker build superawesome2.azurecr.io/tripsgo:v1 apis/trips
+      run: docker build -t superawesome2.azurecr.io/tripsgo:v1 .
       
     - name: Docker push
       run: docker push superawesome2.azurecr.io/tripsgo:v1
