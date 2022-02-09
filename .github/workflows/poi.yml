@@ -31,8 +31,8 @@ jobs:
     - name: .NET Build Web
       run: dotnet build --configuration Release --no-restore apis/poi/web/*.csproj
 
-    - name: .NET Build Unit Tests
-      run: dotnet build --configuration Release apis/poi/tests/UnitTests/UnitTests.csproj
+    # - name: .NET Build Unit Tests
+    #   run: dotnet build --configuration Release apis/poi/tests/UnitTests/UnitTests.csproj
 
     # - name: Docker Login
     #   run: docker login superawesome2.azurecr.io --username=${{SECRETS.CONTAINER_USER}} --password=${{SECRETS.CONTAINER_SECRET}}
@@ -56,6 +56,7 @@ jobs:
         username: ${{ secrets.CONTAINER_USER }}
         password: ${{ secrets.CONTAINER_SECRET }}
     - run: |
+        ls -la
         docker build . superawesome2.azurecr.io/mydriveway/api-poi:${{GITHUB.RUN_NUMBER}}
         docker push superawesome2.azurecr.io/mydriveway/api-poi:${{GITHUB.RUN_NUMBER}}
 
