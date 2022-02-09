@@ -55,7 +55,7 @@ jobs:
         login-server: superawesome2.azurecr.io
         username: ${{ secrets.CONTAINER_USER }}
         password: ${{ secrets.CONTAINER_SECRET }}
-      run: |
+    - run: |
         docker build /apis/userprofile/Dockerfile superawesome2.azurecr.io/mydriveway/api-poi:${{GITHUB.RUN_NUMBER}}
         docker push superawesome2.azurecr.io/mydriveway/api-poi:${{GITHUB.RUN_NUMBER}}
 
