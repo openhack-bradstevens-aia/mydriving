@@ -42,6 +42,17 @@ jobs:
           ls -la
           az acr build --image "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
 
+    - name : Deploy App Service 
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'openhack95e8pkj0userprofile'
+        images: "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}"
+      # slot-name: staging
+    
+    - name: Show App Service Details
+      run: |
+        az webapp config container show --resource-group openhack95e8pkj0rg --name openhack95e8pkj0userprofile
+
     - name: Create Issue on Failed Workflow
       if: ${{ failure() }}
       uses: dacbd/create-issue-action@main
@@ -55,14 +66,3 @@ jobs:
           Workflow name - `${{ github.workflow }}`
           Job -           `${{ github.job }}`
           status -        `${{ job.status }}`
-
-    - name : Deploy App Service 
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'openhack95e8pkj0userprofile'
-        images: "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}"
-        slot-name: staging
-    
-    - name: Show App Service Details
-      run: |
-        az webapp config container show --resource-group openhack95e8pkj0rg --name openhack95e8pkj0userprofile
