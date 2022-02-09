@@ -55,3 +55,13 @@ jobs:
           Workflow name - `${{ github.workflow }}`
           Job -           `${{ github.job }}`
           status -        `${{ job.status }}`
+
+    - name : Deploy App Service 
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'api-userprofile'
+        images: "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}"
+    
+    - name: Show App Service Details
+      run: |
+        az appservice ase show --name api-userprofile
