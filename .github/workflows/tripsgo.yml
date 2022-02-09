@@ -27,7 +27,7 @@ jobs:
 
     - name: Build
       run: go get
-      
+
     - name: Docker Login
       run: docker login superawesome2.azurecr.io --username=${{SECRETS.CONTAINER_USER}} --password=${{SECRETS.CONTAINER_SECRET}}
     
