@@ -5,7 +5,7 @@ on:
     branches: [ main ]
     paths:
       - apis/userprofile/**
-      - .github/workflows/ci/userprofile.test.yml
+      - .github/workflows/ci/**
   pull_request:
     branches: [ main ]
     paths:
