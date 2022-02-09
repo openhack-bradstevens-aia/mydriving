@@ -32,11 +32,8 @@ jobs:
       run: docker login superawesome2.azurecr.io --username=${{SECRETS.CONTAINER_USER}} --password=${{SECRETS.CONTAINER_SECRET}}
     
     - name: Docker build
-      run: docker build -t mydriveway/api-tripsgo .
-
-    - name: Docker tag
-      run: docker tag mydriveway/api-tripsgo mydriveway/api-tripsgo:${{GITHUB.RUN_NUMBER}} 
-
+      run: docker build -t superawesome2.azurecr.io/mydriveway/api-tripsgo:${{GITHUB.RUN_NUMBER}} .
+      
     - name: Docker push
       run: docker push superawesome2.azurecr.io/mydriveway/api-tripsgo:${{GITHUB.RUN_NUMBER}}
 
