@@ -33,6 +33,7 @@ on:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+
     # - name: Execute Azure CLI Commands
     #   uses: azure/CLI@v1
     #   with:
