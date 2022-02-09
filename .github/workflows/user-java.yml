@@ -23,43 +23,38 @@ jobs:
         working-directory: apis/user-java
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 11
-      uses: actions/setup-java@v2
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-        cache: maven
+    # - name: Set up JDK 11
+    #   uses: actions/setup-java@v2
+    #   with:
+    #     java-version: '11'
+    #     distribution: 'temurin'
+    #     cache: maven
 
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+    # - name: Build with Maven
+    #   run: mvn -B package --file pom.xml
 
-    - name: Test with Maven
-      run: mvn test
+    # - name: Test with Maven
+    #   run: mvn test
 
     - name: Azure Login
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Azure CLI script
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.30.0
-        inlineScript: |
-          cd apis/user-java
-          az acr build --image "mydriveway/api-user-java:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
+    # - name: Azure CLI script
+    #   uses: azure/CLI@v1
+    #   with:
+    #     azcliversion: 2.30.0
+    #     inlineScript: |
+    #       cd apis/user-java
+    #       az acr build --image "mydriveway/api-user-java:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
 
     - name: Deploy to App Service
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'openhack95e8pkj0userjava'
-<<<<<<< HEAD
         images: 'superawesome2.azurecr.io/mydriveway/api-user-java:9'
         # slot-name: staging
-=======
-        images: 'superawesome2.azurecr.io/api-user-java:${{github.RUN_NUMBER }}'
-        slot-name: staging
->>>>>>> 19b278502440bce3b0690100d3f466075bdabf69
 
     - name: Create Issue on Failed Workflow
       if: ${{ failure() }}

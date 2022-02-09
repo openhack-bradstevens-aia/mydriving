@@ -33,13 +33,13 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Execute Azure CLI Commands
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.30.0
-        inlineScript: |
-          cd apis/userprofile
-          az acr build --image "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
+    # - name: Execute Azure CLI Commands
+    #   uses: azure/CLI@v1
+    #   with:
+    #     azcliversion: 2.30.0
+    #     inlineScript: |
+    #       cd apis/userprofile
+    #       az acr build --image "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
 
     - name : Deploy App Service 
       uses: azure/webapps-deploy@v2
@@ -48,9 +48,9 @@ jobs:
         images: "superawesome2.azurecr.io/mydriveway/api-userprofile:31"
         # slot-name: staging
     
-    - name: Show App Service Details
-      run: |
-        az webapp config container show --resource-group openhack95e8pkj0rg --name openhack95e8pkj0userprofile
+    # - name: Show App Service Details
+    #   run: |
+    #     az webapp config container show --resource-group openhack95e8pkj0rg --name openhack95e8pkj0userprofile
 
     - name: Create Issue on Failed Workflow
       if: ${{ failure() }}
