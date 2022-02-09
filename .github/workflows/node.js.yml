@@ -54,4 +54,4 @@ jobs:
         azcliversion: 2.30.0
         inlineScript: |
           az account show
-          az version
+          az acr build --image "mydriveway/api-userprofile:v1.0.0" --registry osuperawesome2.azurecr.io --file Dockerfile .
