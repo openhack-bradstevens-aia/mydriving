@@ -6,6 +6,7 @@ on:
     branches: [ main ]
     paths:
       - apis/poi/**
+      - .github/workflows/poi.yml
   pull_request:
     branches: [ main ]
     paths:
