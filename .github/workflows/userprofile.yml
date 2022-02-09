@@ -8,7 +8,7 @@ on:
     branches: [ main ]
     paths:
       - apis/userprofile/**
-      - .github/workflows/node.js.yml
+      - .github/workflows/userprofile.yml
   pull_request:
     branches: [ main ]
     paths:
@@ -53,6 +53,6 @@ jobs:
       with:
         azcliversion: 2.30.0
         inlineScript: |
-          cd "apis/userprofile"
+          cd apis/userprofile
           ls -la
           az acr build --image "mydriveway/api-userprofile:v1.0.0" --registry superawesome2.azurecr.io --file Dockerfile .
