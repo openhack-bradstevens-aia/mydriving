@@ -13,7 +13,7 @@ var morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./config/swagger.json');
 
-var App = Express();
+ar App = Express();
 
 var Server = Http.createServer(App);
 
