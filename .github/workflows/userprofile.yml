@@ -61,6 +61,7 @@ jobs:
       with:
         app-name: 'openhack95e8pkj0userprofile'
         images: "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}"
+        slot-name: staging
     
     - name: Show App Service Details
       run: |
