@@ -3,11 +3,11 @@ name: POI api Testing
 
 on:
   push:
-    branches: [ main pb_* ]
+    branches: [ main ]
     paths:
       - apis/poi/**
   pull_request:
-    branches: [ main pb_* ]
+    branches: [ main ]
     paths:
       - apis/poi/**
 
