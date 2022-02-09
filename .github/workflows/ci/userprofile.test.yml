@@ -40,9 +40,6 @@ jobs:
           Workflow name - `${{ github.workflow }}`
           Job -           `${{ github.job }}`
           status -        `${{ job.status }}`
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
 
     - name: Azure Login
       uses: azure/login@v1
