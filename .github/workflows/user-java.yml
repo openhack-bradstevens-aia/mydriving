@@ -29,10 +29,27 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
+
     - name: Build with Maven
-      run: mvn -B package --file pom.xml && mvn test
-    # force error to force issue creation on failure
-    # - run: exit 1
+      run: mvn -B package --file pom.xml
+
+    - name: Test with Maven
+      run: mvn test
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Azure CLI script
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.30.0
+        inlineScript: |
+          cd apis/user-java
+          ls -la
+          az acr build --image "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
+
     - name: Create Issue on Failed Workflow
       if: ${{ failure() }}
       uses: dacbd/create-issue-action@main
@@ -46,16 +63,3 @@ jobs:
           Workflow name - `${{ github.workflow }}`
           Job -           `${{ github.job }}`
           status -        `${{ job.status }}`
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: Azure CLI script
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.30.0
-        inlineScript: |
-          cd apis/user-java
-          ls -la
-          az acr build --image "mydriveway/api-user:v1.0.0" --registry superawesome2.azurecr.io --file Dockerfile .
