@@ -65,4 +65,4 @@ jobs:
     
     - name: Show App Service Details
       run: |
-        az appservice ase show --name api-userprofile
+        az webapp config container show --resource-group openhack95e8pkj0rg --name openhack95e8pkj0userprofile
