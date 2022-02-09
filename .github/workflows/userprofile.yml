@@ -33,7 +33,6 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-
     # - name: Execute Azure CLI Commands
     #   uses: azure/CLI@v1
     #   with:
@@ -60,7 +59,7 @@ jobs:
     - name : Deploy App Service 
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'openhack95e8pkj0userprofile'
+        app-name: 'openhack95e8pkj0userprofile-staging'
         images: "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}"
     
     - name: Show App Service Details
