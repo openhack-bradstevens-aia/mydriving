@@ -20,27 +20,27 @@ jobs:
         working-directory: apis/userprofile
     steps:
     - uses: actions/checkout@v2
-#       with:
-#         node-version: '12'
-#         cache: 'npm'
-#     - run: npm install 
-#     - run: npm test
-#     # force error to force issue creation on failure
-#     # - run: exit 1
+      with:
+        node-version: '12'
+        cache: 'npm'
+    - run: npm install 
+    - run: npm test
+    # force error to force issue creation on failure
+    # - run: exit 1
 
     - name: Login to Azure CLI
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    # - name: Execute Azure CLI Commands
-    #   uses: azure/CLI@v1
-    #   with:
-    #     azcliversion: 2.30.0
-    #     inlineScript: |
-    #       cd apis/userprofile
-    #       ls -la
-    #       az acr build --image "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
+    - name: Execute Azure CLI Commands
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.30.0
+        inlineScript: |
+          cd apis/userprofile
+          ls -la
+          az acr build --image "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
 
     - name: Create Issue on Failed Workflow
       if: ${{ failure() }}
