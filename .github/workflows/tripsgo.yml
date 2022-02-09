@@ -47,6 +47,6 @@ jobs:
 
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: 'tripsgo'
+        app-name: 'openhack95e8pkj0trips'
         images: "superawesome2.azurecr.io/mydriveway/api-tripsgo:20"  #Using tag 20 temporarily
     
