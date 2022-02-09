@@ -53,6 +53,6 @@ jobs:
       with:
         azcliversion: 2.30.0
         inlineScript: |
-          cd "$GITOHTEAMDIRPATH/apis/userprofile"
+          cd "apis/userprofile"
           ls -la
           az acr build --image "mydriveway/api-userprofile:v1.0.0" --registry superawesome2.azurecr.io --file Dockerfile .
