@@ -48,7 +48,7 @@ jobs:
         inlineScript: |
           cd apis/user-java
           ls -la
-          az acr build --image "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
+          az acr build --image "mydriveway/api-user-java:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
 
     - name: Create Issue on Failed Workflow
       if: ${{ failure() }}
