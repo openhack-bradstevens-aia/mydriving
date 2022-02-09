@@ -25,10 +25,13 @@ jobs:
       run: dotnet add package coverlet.msbuild
     - name: Install dependencies
       run: dotnet restore apis/poi/web/*.csproj
+
     - name: .NET Build Web
       run: dotnet build --configuration Release --no-restore apis/poi/web/*.csproj
+
     - name: .NET Build Unit Tests
       run: dotnet build --configuration Release apis/poi/tests/UnitTests/UnitTests.csproj
+
     - name: Docker Login
       run: docker login superawesome2.azurecr.io --username=${{SECRETS.CONTAINER_USER}} --password=${{SECRETS.CONTAINER_SECRET}}
     
@@ -37,10 +40,11 @@ jobs:
       run: docker build -t mydriveway/poi-api:${{GITHUB.RUN_NUMBER}} .
       
     - name: Docker push
-      run: docker push mydriveway/poi-api:${{GITHUB.RUN_NUMBER}}
+      run: docker push superawesome2.azurecr.io/mydriveway/poi-api:${{GITHUB.RUN_NUMBER}}
 
     - name: .NET Test
       run: dotnet test --no-restore --verbosity normal apis/poi/tests/UnitTests  /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov
+
     - name: Coveralls
       uses: coverallsapp/github-action@master
       with:
