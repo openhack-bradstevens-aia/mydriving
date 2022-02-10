@@ -110,7 +110,7 @@ jobs:
       if: failure()
       with:
         token: ${{ github.token }}
-        title: Action workflow failed.
+        title: Swapping ${{ env.WEBAPP_NAME }} staging to productoin failed.
         body: |
           ### Context
           [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
