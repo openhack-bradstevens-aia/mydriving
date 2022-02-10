@@ -72,18 +72,18 @@ jobs:
     - name: Swap staging to production
       run: |
         az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot staging --target-slot production
-      uses: dacbd/create-issue-action@main
-      if: failure()
-      with:
-        token: ${{ github.token }}
-        title: Action workflow failed.
-        body: |
-          ### Context
-          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
-          [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
-          Workflow name - `${{ github.workflow }}`
-          Job -           `${{ github.job }}`
-          status -        `${{ job.status }}`
+      # uses: dacbd/create-issue-action@main
+      # if: failure()
+      # with:
+      #   token: ${{ github.token }}
+      #   title: Action workflow failed.
+      #   body: |
+      #     ### Context
+      #     [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
+      #     [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
+      #     Workflow name - `${{ github.workflow }}`
+      #     Job -           `${{ github.job }}`
+      #     status -        `${{ job.status }}`
 
     - name: Validate_Production
       uses: jtalk/url-health-check-action@v2
@@ -119,16 +119,16 @@ jobs:
     #           Job -           `${{ github.job }}`
     #           status -        `${{ job.status }}`
 
-    - name: Create Issue on Failed Workflow
-      if: failure()
-      uses: dacbd/create-issue-action@main
-      with:
-        token: ${{ github.token }}
-        title: Action workflow failed.
-        body: |
-          ### Context
-          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
-          [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
-          Workflow name - `${{ github.workflow }}`
-          Job -           `${{ github.job }}`
-          status -        `${{ job.status }}`
+    # - name: Create Issue on Failed Workflow
+    #   if: failure()
+    #   uses: dacbd/create-issue-action@main
+    #   with:
+    #     token: ${{ github.token }}
+    #     title: Action workflow failed.
+    #     body: |
+    #       ### Context
+    #       [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
+    #       [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
+    #       Workflow name - `${{ github.workflow }}`
+    #       Job -           `${{ github.job }}`
+    #       status -        `${{ job.status }}`
