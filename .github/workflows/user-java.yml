@@ -60,6 +60,10 @@ jobs:
         images: "${{ env.ACR }}/mydriveway/api-user-java:${{ github.run_number }}"
         slot-name: staging
 
+    - name: Swap staging to production
+      run: |
+        az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot staging --target-slot production
+
     - name: Create Issue on Failed Workflow
       if: ${{ failure() }}
       uses: dacbd/create-issue-action@main
