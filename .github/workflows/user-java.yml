@@ -2,7 +2,7 @@ name: user-java
 
 env:
   ACR: superawesome2.azurecr.io
-  DOCKER_PATH: apis/user-java/Dockerfile
+  DOCKER_PATH: apis/user-java
   STAGING_URL: https://openhack95e8pkj0userjava-staging.azurewebsites.net
   PROD_URL: https://openhack95e8pkj0userjava.azurewebsites.net
   RG: openhack95e8pkj0rg
