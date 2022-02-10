@@ -46,7 +46,7 @@ jobs:
         azcliversion: 2.30.0
         inlineScript: |
           cd ${{ env.WORKING_DIR }}
-          az acr build --image "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}" --registry ${{ env.ACR }} --file Dockerfile .
+          az acr build --image "mydriveway/api-userprofile:${{ github.run_number }}" --registry ${{ env.ACR }} --file Dockerfile .
 
     - name : Deploy App Service 
       uses: azure/webapps-deploy@v2
