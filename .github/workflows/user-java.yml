@@ -19,7 +19,7 @@ on:
       - apis/user-java/**
 
 jobs:
-  build:
+  build_and_test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -39,58 +39,7 @@ jobs:
 
     - name: Test with Maven
       run: mvn test
-      
-    - name: Create Issue on Failed Workflow
-      if: failure()
-      uses: dacbd/create-issue-action@main
-      with:
-        token: ${{ github.token }}
-        title: Action workflow failed.
-        body: |
-          ### Context
-          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
-          [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
-          Workflow name - `${{ github.workflow }}`
-          Job -           `${{ github.job }}`
-          status -        `${{ job.status }}`
-          
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: Azure CLI script
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.30.0
-        inlineScript: |
-          cd apis/user-java
-          az acr build --image "mydriveway/api-user-java:${{ github.run_number }}" --registry superawesome2.azurecr.io --file Dockerfile .
-
-    - name : Deploy App Service 
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ env.WEBAPP_NAME }}
-        images: "${{ env.ACR }}/mydriveway/api-user-java:${{ github.run_number }}"
-        slot-name: staging
-
-    - name: Validate Staging
-      uses: jtalk/url-health-check-action@v2
-      with:
-        # Check the following URLs one by one sequentially
-        url: ${{ env.STAGING_URL }}
-        # Follow redirects, or just report success on 3xx status codes
-        follow-redirect: false # Optional, defaults to "false"
-        # Fail this action after this many failed attempts
-        max-attempts: 3 # Optional, defaults to 1
-        # Delay between retries
-        retry-delay: 5s # Optional, only applicable to max-attempts > 1
-        # Retry all errors, including 404. This option might trigger curl upgrade.
-        retry-all: false # Optional, defaults to "false"
-
-    - name: Swap staging to production
-      run: |
-        az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot staging --target-slot production
+    
     - uses: dacbd/create-issue-action@main
       if: failure()
       with:
@@ -104,8 +53,122 @@ jobs:
           Job -           `${{ github.job }}`
           status -        `${{ job.status }}`
 
-    - name: Validate_Production
-      uses: jtalk/url-health-check-action@v2
+  acr_build_and_push:
+    runs-on: ubuntu-latest
+    needs: build_and_test
+    steps:
+    - name: Azure Authentication
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Build ACR Container Image
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.30.0
+        inlineScript: |
+          cd apis/user-java
+          az acr build --image "mydriveway/api-user-java:${{ github.run_number }}" --registry ${{ env.ACR }} --file Dockerfile .
+            
+    - uses: dacbd/create-issue-action@main
+      if: failure()
+      with:
+        token: ${{ github.token }}
+        title: Action workflow failed.
+        body: |
+          ### Context
+          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
+          [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
+          Workflow name - `${{ github.workflow }}`
+          Job -           `${{ github.job }}`
+          status -        `${{ job.status }}`
+
+  deploy_staging:
+    needs: acr_build_and_push
+    steps:
+    - name: Azure Authentication
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name : Deploy Azure App Service WebApp 
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.WEBAPP_NAME }}
+        slot-name: staging
+        images: "${{ env.ACR }}/mydriveway/api-user-java:${{ github.run_number }}"
+
+    - uses: dacbd/create-issue-action@main
+      if: failure()
+      with:
+        token: ${{ github.token }}
+        title: Action workflow failed.
+        body: |
+          ### Context
+          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
+          [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
+          Workflow name - `${{ github.workflow }}`
+          Job -           `${{ github.job }}`
+          status -        `${{ job.status }}`
+
+  validate_staging:
+    needs: deploy_staging
+    steps:
+    - uses: jtalk/url-health-check-action@v2
+      with:
+        # Check the following URLs one by one sequentially
+        url: ${{ env.STAGING_URL }}
+        # Follow redirects, or just report success on 3xx status codes
+        follow-redirect: false # Optional, defaults to "false"
+        # Fail this action after this many failed attempts
+        max-attempts: 3 # Optional, defaults to 1
+        # Delay between retries
+        retry-delay: 5s # Optional, only applicable to max-attempts > 1
+        # Retry all errors, including 404. This option might trigger curl upgrade.
+        retry-all: false # Optional, defaults to "false"
+
+    - uses: dacbd/create-issue-action@main
+      if: failure()
+      with:
+        token: ${{ github.token }}
+        title: Action workflow failed.
+        body: |
+          ### Context
+          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
+          [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
+          Workflow name - `${{ github.workflow }}`
+          Job -           `${{ github.job }}`
+          status -        `${{ job.status }}`
+
+  swap_slots:
+    needs: validate_staging
+    steps:
+    - name: Azure Authentication
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Swap Staging to Production
+      run: |
+        az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot staging --target-slot production
+
+    - uses: dacbd/create-issue-action@main
+      if: failure()
+      with:
+        token: ${{ github.token }}
+        title: Action workflow failed.
+        body: |
+          ### Context
+          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
+          [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
+          Workflow name - `${{ github.workflow }}`
+          Job -           `${{ github.job }}`
+          status -        `${{ job.status }}`
+
+  validate_production:
+    needs: swap_slots
+    steps:
+    - uses: jtalk/url-health-check-action@v2
       with:
         # Check the following URLs one by one sequentially
         url: ${{ env.PROD_URL }}
@@ -117,24 +180,40 @@ jobs:
         retry-delay: 5s # Optional, only applicable to max-attempts > 1
         # Retry all errors, including 404. This option might trigger curl upgrade.
         retry-all: false # Optional, defaults to "false"
-      
-    - name: Rollback
+    
+    - uses: dacbd/create-issue-action@main
       if: failure()
-      needs: Validate_Production
-      steps:
-        - name: Swap Production with Staging
-          run: |
-            az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot production --target-slot staging
-        - uses: dacbd/create-issue-action@main
-          if: failure()
-          with:
-            token: ${{ github.token }}
-            title: Action workflow failed.
-            body: |
-              ### Context
-              [Rollback Failure](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
-              [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
-              Workflow name - `${{ github.workflow }}`
-              Job -           `${{ github.job }}`
-              status -        `${{ job.status }}`
-      
+      with:
+        token: ${{ github.token }}
+        title: Action workflow failed.
+        body: |
+          ### Context
+          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
+          [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
+          Workflow name - `${{ github.workflow }}`
+          Job -           `${{ github.job }}`
+          status -        `${{ job.status }}`
+
+  roll_back:
+    if: failure()
+    needs: validate_production
+    steps:
+    - name: Azure Authentication
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Swap Production with Staging
+      run: |
+        az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot production --target-slot staging
+      - uses: dacbd/create-issue-action@main
+        if: failure()
+        with:
+          token: ${{ github.token }}
+          title: Action workflow failed.
+          body: |
+            ### Context
+            [Rollback Failure](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
+            [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
+            Workflow name - `${{ github.workflow }}`
+            Job -           `${{ github.job }}`
+            status -        `${{ job.status }}`
