@@ -1,7 +1,11 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
 name: user-java
+
+env:
+  ACR: superawesome2.azurecr.io
+  STAGING_URL: https://openhack95e8pkj0userjava-staging.azurewebsites.net
+  PROD_URL: https://openhack95e8pkj0userjava.azurewebsites.net
+  RG: openhack95e8pkj0rg
+  WEBAPP_NAME: openhack95e8pkj0userjava
 
 on:
   push:
@@ -49,11 +53,11 @@ jobs:
           cd apis/user-java
           az acr build --image "mydriveway/api-user-java:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
 
-    - name: Deploy to App Service
+    - name : Deploy App Service 
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'openhack95e8pkj0userjava'
-        images: 'superawesome2.azurecr.io/mydriveway/api-user-java:${{GITHUB.RUN_NUMBER}}'
+        app-name: ${{ env.WEBAPP_NAME }}
+        images: "${{ env.ACR }}/mydriveway/api-userprofile:${{ github.run_number }}"
         # slot-name: staging
 
     - name: Create Issue on Failed Workflow
