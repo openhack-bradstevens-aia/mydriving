@@ -1,4 +1,12 @@
 name: poi
+
+env:
+  ACR: superawesome2.azurecr.io
+  STAGING_URL: https://openhack95e8pkj0poi-staging.azurewebsites.net
+  PROD_URL: https://openhack95e8pkj0poi.azurewebsites.net
+  RG: openhack95e8pkj0rg
+  WEBAPP_NAME: openhack95e8pkj0poi
+
 on:
   push:
     branches:
@@ -63,6 +71,6 @@ jobs:
     - name : Deploy App Service 
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'openhack95e8pkj0poi'
-        images: "superawesome2.azurecr.io/mydriveway/api-poi:${{GITHUB.RUN_NUMBER}}"
+        app-name: ${{ env.WEBAPP_NAME }}
+        images: "${{ env.ACR }}/mydriveway/api-userprofile:${{ github.run_number }}"
         # slot-name: staging
