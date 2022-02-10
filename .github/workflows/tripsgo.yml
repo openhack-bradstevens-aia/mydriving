@@ -49,8 +49,8 @@ jobs:
     - name: Docker push
       run: docker push superawesome2.azurecr.io/mydriveway/api-tripsgo:${{GITHUB.RUN_NUMBER}}
 
-    - name: Test
-      run: go test ./tripsgo -run Unit
+    # - name: Test
+    #   run: go test ./tripsgo -run Unit
 
     - uses: azure/webapps-deploy@v2
       with:
