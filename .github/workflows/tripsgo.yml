@@ -35,38 +35,42 @@ jobs:
     - name: Build
       run: go get
 
-    # - name: Test
-    #   run: go test ./tripsgo -run Unit
-
     - name: Login to Azure CLI
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Execute Azure CLI Commands
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.30.0
-        inlineScript: |
-          cd apis/trips
-          az acr build --image "mydriveway/api-tripsgo:${{ github.run_number }}" --registry superawesome2.azurecr.io --file Dockerfile .
-
-    # - name: Docker Login
-    #   run: docker login superawesome2.azurecr.io --username=${{SECRETS.CONTAINER_USER}} --password=${{SECRETS.CONTAINER_SECRET}}
+    - name: Docker Login
+      run: docker login superawesome2.azurecr.io --username=${{SECRETS.CONTAINER_USER}} --password=${{SECRETS.CONTAINER_SECRET}}
     
-    # - name: Docker build
-    #   run: docker build -t superawesome2.azurecr.io/mydriveway/api-tripsgo:${{GITHUB.RUN_NUMBER}} .
+    - name: Docker build
+      run: docker build -t superawesome2.azurecr.io/mydriveway/api-tripsgo:${{GITHUB.RUN_NUMBER}} .
       
-    # - name: Docker push
-    #   run: docker push superawesome2.azurecr.io/mydriveway/api-tripsgo:${{GITHUB.RUN_NUMBER}}
+    - name: Docker push
+      run: docker push superawesome2.azurecr.io/mydriveway/api-tripsgo:${{GITHUB.RUN_NUMBER}}
 
-    - name : Deploy App Service 
-      uses: azure/webapps-deploy@v2
+    - name: Test
+      run: go test ./tripsgo -run Unit
+
+    - uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ env.WEBAPP_NAME }}
-        images: "${{ env.ACR }}/mydriveway/api-tripsgo:${{ github.run_number }}"
+        app-name: 'openhack95e8pkj0trips'
+        images: "superawesome2.azurecr.io/mydriveway/api-tripsgo:${{ github.run_number }}"  #Can test with tag 20 temporarily
         slot-name: staging
-    
+
+    - name: Create Issue on Failed Workflow
+      if: failure()
+      uses: dacbd/create-issue-action@main
+      with:
+        token: ${{ github.token }}
+        title: Action workflow failed.
+        body: |
+          ### Context
+          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
+          [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
+          Workflow name - `${{ github.workflow }}`
+          Job -           `${{ github.job }}`
+          status -        `${{ job.status }}`
     - name: Validate Staging
       uses: jtalk/url-health-check-action@v2
       with:
@@ -80,3 +84,54 @@ jobs:
         retry-delay: 5s # Optional, only applicable to max-attempts > 1
         # Retry all errors, including 404. This option might trigger curl upgrade.
         retry-all: false # Optional, defaults to "false"
+
+    - name: Swap staging to production
+      run: |
+        az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot staging --target-slot production
+    - uses: dacbd/create-issue-action@main
+      if: failure()
+      with:
+        token: ${{ github.token }}
+        title: Action workflow failed.
+        body: |
+          ### Context
+          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
+          [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
+          Workflow name - `${{ github.workflow }}`
+          Job -           `${{ github.job }}`
+          status -        `${{ job.status }}`
+
+    - name: Validate_Production
+      uses: jtalk/url-health-check-action@v2
+      with:
+        # Check the following URLs one by one sequentially
+        url: ${{ env.PROD_URL }}
+        # Follow redirects, or just report success on 3xx status codes
+        follow-redirect: false # Optional, defaults to "false"
+        # Fail this action after this many failed attempts
+        max-attempts: 3 # Optional, defaults to 1
+        # Delay between retries
+        retry-delay: 5s # Optional, only applicable to max-attempts > 1
+        # Retry all errors, including 404. This option might trigger curl upgrade.
+        retry-all: false # Optional, defaults to "false"
+      
+    - name: Rollback
+      if: failure()
+      needs: Validate_Production
+      steps:
+        - name: Swap Production with Staging
+          run: |
+            az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot production --target-slot staging
+        - uses: dacbd/create-issue-action@main
+          if: failure()
+          with:
+            token: ${{ github.token }}
+            title: Action workflow failed.
+            body: |
+              ### Context
+              [Rollback Failure](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
+              [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
+              Workflow name - `${{ github.workflow }}`
+              Job -           `${{ github.job }}`
+              status -        `${{ job.status }}`
+      
