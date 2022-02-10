@@ -20,7 +20,7 @@ on:
       - '*'
     paths:
       - apis/poi/**
-      - .github/workflows/poi.yml
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -137,7 +137,7 @@ jobs:
     - name: Rollback
       if: failure()
       run: |
-        az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot production --target-slot staging
+        az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot staging --target-slot production
     
     - name: Create issue
       uses: dacbd/create-issue-action@main
