@@ -59,7 +59,7 @@ jobs:
       uses: jtalk/url-health-check-action@v2
       with:
         # Check the following URLs one by one sequentially
-        url: ${{ env.STAGING_URL }}
+        url: ${{ env.STAGING_URL }}/api/healthcheck/user
         # Follow redirects, or just report success on 3xx status codes
         follow-redirect: false # Optional, defaults to "false"
         # Fail this action after this many failed attempts
@@ -89,7 +89,7 @@ jobs:
       uses: jtalk/url-health-check-action@v2
       with:
         # Check the following URLs one by one sequentially
-        url: ${{ env.PROD_URL }}
+        url: ${{ env.PROD_URL }}/api/healthcheck/user
         # Follow redirects, or just report success on 3xx status codes
         follow-redirect: false # Optional, defaults to "false"
         # Fail this action after this many failed attempts
