@@ -35,8 +35,8 @@ jobs:
     - name: Build
       run: go get
 
-    - name: Test
-      run: go test ./tripsgo -run Unit
+    # - name: Test
+    #   run: go test ./tripsgo -run Unit
 
     - name: Login to Azure CLI
       uses: azure/login@v1
@@ -67,7 +67,7 @@ jobs:
         images: "${{ env.ACR }}/mydriveway/api-tripsgo:${{ github.run_number }}"
         slot-name: staging
     
-    - name: Validate Production
+    - name: Validate Staging
       uses: jtalk/url-health-check-action@v2
       with:
         # Check the following URLs one by one sequentially
