@@ -206,9 +206,10 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Swap Production with Staging
+    - name: Swap Production to Staging
       run: |
         az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot production --target-slot staging
+
     - uses: dacbd/create-issue-action@main
       if: failure()
       with:
