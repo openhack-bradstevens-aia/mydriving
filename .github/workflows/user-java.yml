@@ -63,10 +63,8 @@ jobs:
     - name: Swap staging to production
       run: |
         az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot staging --target-slot production
-
-    - name: Create Issue on Failed Workflow
-      if: ${{ failure() }}
-      uses: dacbd/create-issue-action@main
+    - uses: dacbd/create-issue-action@main
+      if: failure()
       with:
         token: ${{ github.token }}
         title: Action workflow failed.
