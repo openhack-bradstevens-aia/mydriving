@@ -123,29 +123,29 @@ jobs:
           Job -           `${{ github.job }}`
           status -        `${{ job.status }}`
 
-  route_traffic_one_percent:
-    needs: deploy_staging
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
-    - name: Azure Authentication
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-    - name: Route Traffic Percentage
-      run: |
-        az webapp traffic-routing set --distribution staging=1 --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }}
+  # route_traffic_one_percent:
+  #   needs: deploy_staging
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   steps:
+  #   - name: Azure Authentication
+  #     uses: azure/login@v1
+  #     with:
+  #       creds: ${{ secrets.AZURE_CREDENTIALS }}
+  #   - name: Route Traffic Percentage
+  #     run: |
+  #       az webapp traffic-routing set --distribution staging=1 --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }}
 
-  validate_one_percent:
-    needs: route_traffic_one_percent
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
-    - name: 
+  # validate_one_percent:
+  #   needs: route_traffic_one_percent
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   steps:
+  #   - name: 
 
   validate_staging:
     needs: deploy_staging
