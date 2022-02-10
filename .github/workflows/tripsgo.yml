@@ -115,23 +115,22 @@ jobs:
         # Retry all errors, including 404. This option might trigger curl upgrade.
         retry-all: false # Optional, defaults to "false"
       
-    - name: Rollback
-      if: failure()
-      needs: Validate_Production
-      steps:
-        - name: Swap Production with Staging
-          run: |
-              az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot production --target-slot staging
-        - uses: dacbd/create-issue-action@main
-          if: failure()
-          with:
-            token: ${{ github.token }}
-            title: Action workflow failed.
-            body: |
-              ### Context
-              [Rollback Failure](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
-              [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
-              Workflow name - `${{ github.workflow }}`
-              Job -           `${{ github.job }}`
-              status -        `${{ job.status }}`
-      
+    # - name: Rollback
+    #   if: failure()
+    #   needs: Validate_Production
+    #   steps:
+    #     - name: Swap Production with Staging
+    #       run: |
+    #           az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot production --target-slot staging
+    #     - uses: dacbd/create-issue-action@main
+    #       if: failure()
+    #       with:
+    #         token: ${{ github.token }}
+    #         title: Action workflow failed.
+    #         body: |
+    #           ### Context
+    #           [Rollback Failure](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
+    #           [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
+    #           Workflow name - `${{ github.workflow }}`
+    #           Job -           `${{ github.job }}`
+    #           status -        `${{ job.status }}`
