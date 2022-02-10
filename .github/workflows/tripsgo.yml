@@ -15,8 +15,8 @@ on:
     paths:
      - apis/trips/**
      - .github/workflows/tripsgo.yml
-  pull_request:
-    branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
 
 jobs:
 
@@ -121,7 +121,7 @@ jobs:
     - name: Rollback
       if: failure()
       run: |
-        az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot production --target-slot staging
+        az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot staging --target-slot production
 
 # Deploy again to Staging after swap
     # - uses: azure/webapps-deploy@v2
