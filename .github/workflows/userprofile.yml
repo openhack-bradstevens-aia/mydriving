@@ -1,15 +1,24 @@
 name: userprofile
 
+env:
+  API_PATH: apis/userprofile/**
+  ACR: superawesome2.azurecr.io
+  WORKING_DIR: apis/userprofile
+  STAGING_URL: https://openhack95e8pkj0userprofile-staging.azurewebsites.net
+  PROD_URL: https://openhack95e8pkj0userprofile.azurewebsites.net
+  RG: openhack95e8pkj0rg
+  WEBAPP_NAME: openhack95e8pkj0userprofile
+
 on:
   push:
     branches: [ main ]
     paths:
-     - apis/userprofile/**
+     - ${{ env.API_PATH }}
      - .github/workflows/userprofile.yml
   pull_request:
     branches: [ main ]
     paths:
-      - apis/userprofile/**
+      - ${{ env.API_PATH }}
 
 jobs:
   build:
@@ -17,13 +26,14 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: apis/userprofile
+        working-directory: ${{ env.WORKING_DIR }}
     steps:
     - uses: actions/checkout@v2
       with:
         node-version: '12'
         cache: 'npm'
-    - run: npm install 
+    - run: npm ci
+    - run: npm build --if-present 
     - run: npm test
 
     - name: Login to Azure CLI
@@ -36,25 +46,24 @@ jobs:
       with:
         azcliversion: 2.30.0
         inlineScript: |
-          cd apis/userprofile
-          az acr build --image "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
+          cd ${{ env.WORKING_DIR }}
+          az acr build --image "mydriveway/api-userprofile:${{ github.RUN_NUMBER }}" --registry ${{ env.ACR }} --file Dockerfile .
 
     - name : Deploy App Service 
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'openhack95e8pkj0userprofile'
-        images: "superawesome2.azurecr.io/mydriveway/api-userprofile:${{GITHUB.RUN_NUMBER}}"
+        app-name: ${{ env.WEBAPP_NAME }}
+        images: "${{ env.ACR }}/mydriveway/api-userprofile:${{ github.run_number }}"
         # slot-name: staging
 
-    - name: Create Issue on Failed Workflow
-      if: ${{ failure() }}
+      if: failure()
       uses: dacbd/create-issue-action@main
       with:
         token: ${{ github.token }}
         title: Action workflow failed.
         body: |
           ### Context
-          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
           [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
           Workflow name - `${{ github.workflow }}`
           Job -           `${{ github.job }}`
