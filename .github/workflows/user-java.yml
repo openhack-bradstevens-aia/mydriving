@@ -59,10 +59,11 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: apis/user-java
     needs: build_and_test
     steps:
     - uses: actions/checkout@v2
-    
+
     - name: Azure Authentication
       uses: azure/login@v1
       with:
@@ -74,7 +75,7 @@ jobs:
         azcliversion: 2.30.0
         inlineScript: |
           ls -la
-          az acr build --registry ${{ env.ACR }} --image "mydriveway/api-user-java:${{ github.run_number }}" --file Dockerfile ${{ env.DOCKER_PATH }}
+          az acr build --registry ${{ env.ACR }} --image "mydriveway/api-user-java:${{ github.run_number }}" --file ${{ env.DOCKER_PATH }}
             
     - uses: dacbd/create-issue-action@main
       if: failure()
@@ -133,7 +134,7 @@ jobs:
     - uses: jtalk/url-health-check-action@v2
       with:
         # Check the following URLs one by one sequentially
-        url: ${{ env.STAGING_URL }}
+        url: ${{ env.STAGING_URL }}/api/healthcheck/user-java
         # Follow redirects, or just report success on 3xx status codes
         follow-redirect: false # Optional, defaults to "false"
         # Fail this action after this many failed attempts
