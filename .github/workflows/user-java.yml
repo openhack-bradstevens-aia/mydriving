@@ -2,7 +2,7 @@ name: user-java
 
 env:
   ACR: superawesome2.azurecr.io
-  DOCKER_PATH: apis/user-java
+  DOCKER_PATH: apis/user-java/.
   STAGING_URL: https://openhack95e8pkj0userjava-staging.azurewebsites.net
   PROD_URL: https://openhack95e8pkj0userjava.azurewebsites.net
   RG: openhack95e8pkj0rg
@@ -74,8 +74,8 @@ jobs:
       with:
         azcliversion: 2.30.0
         inlineScript: |
-          ls -la
-          az acr build --registry ${{ env.ACR }} --image "mydriveway/api-user-java:${{ github.run_number }}" --file ${{ env.DOCKER_PATH }}
+          cd apis/user-java
+          az acr build --registry ${{ env.ACR }} --image "mydriveway/api-user-java:${{ github.run_number }}" --file Dockerfile .
             
     - uses: dacbd/create-issue-action@main
       if: failure()
