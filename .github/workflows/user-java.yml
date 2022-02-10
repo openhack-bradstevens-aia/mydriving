@@ -55,6 +55,10 @@ jobs:
 
   acr_build_and_push:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: apis/user-java
     needs: build_and_test
     steps:
     - name: Azure Authentication
@@ -67,7 +71,7 @@ jobs:
       with:
         azcliversion: 2.30.0
         inlineScript: |
-          cd apis/user-java
+          pwd
           az acr build --image "mydriveway/api-user-java:${{ github.run_number }}" --registry ${{ env.ACR }} --file Dockerfile .
             
     - uses: dacbd/create-issue-action@main
@@ -86,6 +90,10 @@ jobs:
   deploy_staging:
     needs: acr_build_and_push
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: apis/user-java
     steps:
     - name: Azure Authentication
       uses: azure/login@v1
@@ -115,6 +123,10 @@ jobs:
   validate_staging:
     needs: deploy_staging
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: apis/user-java
     steps:
     - uses: jtalk/url-health-check-action@v2
       with:
@@ -145,6 +157,10 @@ jobs:
   swap_slots:
     needs: validate_staging
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: apis/user-java
     steps:
     - name: Azure Authentication
       uses: azure/login@v1
@@ -171,6 +187,10 @@ jobs:
   validate_production:
     needs: swap_slots
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: apis/user-java
     steps:
     - uses: jtalk/url-health-check-action@v2
       with:
@@ -202,6 +222,10 @@ jobs:
     if: failure()
     needs: validate_production
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: apis/user-java
     steps:
     - name: Azure Authentication
       uses: azure/login@v1
