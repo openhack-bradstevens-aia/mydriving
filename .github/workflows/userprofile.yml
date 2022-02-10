@@ -55,7 +55,8 @@ jobs:
         app-name: ${{ env.WEBAPP_NAME }}
         images: "${{ env.ACR }}/mydriveway/api-userprofile:${{ github.run_number }}"
         # slot-name: staging
-
+        
+    - name: Create Issue on Failed Workflow
       if: failure()
       uses: dacbd/create-issue-action@main
       with:
