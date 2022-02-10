@@ -121,7 +121,7 @@ jobs:
       steps:
         - name: Swap Production with Staging
           run: |
-            az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot production --target-slot staging
+              az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot production --target-slot staging
         - uses: dacbd/create-issue-action@main
           if: failure()
           with:
