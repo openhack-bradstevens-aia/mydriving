@@ -2,7 +2,7 @@ name: user-java
 
 env:
   ACR: superawesome2.azurecr.io
-  DOCKER_PATH: apis/user-java
+  DOCKER_PATH: apis/user-java/Dockerfile
   STAGING_URL: https://openhack95e8pkj0userjava-staging.azurewebsites.net
   PROD_URL: https://openhack95e8pkj0userjava.azurewebsites.net
   RG: openhack95e8pkj0rg
@@ -75,7 +75,7 @@ jobs:
         azcliversion: 2.30.0
         inlineScript: |
           ls -la
-          az acr build --registry ${{ env.ACR }} --image "mydriveway/api-user-java:${{ github.run_number }}" --file Dockerfile .
+          az acr build --registry ${{ env.ACR }} --image "mydriveway/api-user-java:${{ github.run_number }}" --file ${{ env.DOCKER_PATH }}
             
     - uses: dacbd/create-issue-action@main
       if: failure()
@@ -134,7 +134,7 @@ jobs:
     - uses: jtalk/url-health-check-action@v2
       with:
         # Check the following URLs one by one sequentially
-        url: ${{ env.STAGING_URL }}
+        url: ${{ env.STAGING_URL }}/api/healthcheck/user-java
         # Follow redirects, or just report success on 3xx status codes
         follow-redirect: false # Optional, defaults to "false"
         # Fail this action after this many failed attempts
