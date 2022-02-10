@@ -140,7 +140,7 @@ jobs:
         az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot production --target-slot staging
     
     - name: Create issue
-    - uses: dacbd/create-issue-action@main
+      uses: dacbd/create-issue-action@main
       if: failure()
       with:
         token: ${{ github.token }}
