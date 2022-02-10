@@ -85,6 +85,7 @@ jobs:
 
   deploy_staging:
     needs: acr_build_and_push
+    runs-on: ubuntu-latest
     steps:
     - name: Azure Authentication
       uses: azure/login@v1
@@ -113,6 +114,7 @@ jobs:
 
   validate_staging:
     needs: deploy_staging
+    runs-on: ubuntu-latest
     steps:
     - uses: jtalk/url-health-check-action@v2
       with:
@@ -196,24 +198,26 @@ jobs:
 
   roll_back:
     if: failure()
+    runs-on: ubuntu-latest
     needs: validate_production
     steps:
     - name: Azure Authentication
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+
     - name: Swap Production with Staging
       run: |
         az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot production --target-slot staging
-      - uses: dacbd/create-issue-action@main
-        if: failure()
-        with:
-          token: ${{ github.token }}
-          title: Action workflow failed.
-          body: |
-            ### Context
-            [Rollback Failure](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
-            [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
-            Workflow name - `${{ github.workflow }}`
-            Job -           `${{ github.job }}`
-            status -        `${{ job.status }}`
+    - uses: dacbd/create-issue-action@main
+      if: failure()
+      with:
+        token: ${{ github.token }}
+        title: Action workflow failed.
+        body: |
+          ### Context
+          [Rollback Failure](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
+          [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
+          Workflow name - `${{ github.workflow }}`
+          Job -           `${{ github.job }}`
+          status -        `${{ job.status }}`
