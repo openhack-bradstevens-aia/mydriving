@@ -51,7 +51,7 @@ jobs:
         azcliversion: 2.30.0
         inlineScript: |
           cd apis/user-java
-          az acr build --image "mydriveway/api-user-java:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
+          az acr build --image "mydriveway/api-user-java:${{ github.run_number }}" --registry superawesome2.azurecr.io --file Dockerfile .
 
     - name : Deploy App Service 
       uses: azure/webapps-deploy@v2
@@ -68,7 +68,7 @@ jobs:
         title: Action workflow failed.
         body: |
           ### Context
-          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          [Failed Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }})
           [Codebase](https://github.com/${{ github.repository }}/tree/${{ github.sha }})
           Workflow name - `${{ github.workflow }}`
           Job -           `${{ github.job }}`

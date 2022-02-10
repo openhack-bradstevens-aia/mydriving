@@ -49,7 +49,7 @@ jobs:
         azcliversion: 2.30.0
         inlineScript: |
           cd apis/trips
-          az acr build --image "mydriveway/api-tripsgo:${{ github.RUN_NUMBER }}" --registry superawesome2.azurecr.io --file Dockerfile .
+          az acr build --image "mydriveway/api-tripsgo:${{ github.run_number }}" --registry superawesome2.azurecr.io --file Dockerfile .
 
     # - name: Docker Login
     #   run: docker login superawesome2.azurecr.io --username=${{SECRETS.CONTAINER_USER}} --password=${{SECRETS.CONTAINER_SECRET}}
