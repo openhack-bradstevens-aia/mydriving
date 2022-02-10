@@ -14,10 +14,10 @@ on:
     paths:
       - apis/user-java/**
       - .github/workflows/user-java.yml
-  pull_request:
-    branches: [ main ]
-    paths:
-      - apis/user-java/**
+  # pull_request:
+  #   branches: [ main ]
+  #   paths:
+  #     - apis/user-java/**
 
 jobs:
   build_and_test:
@@ -163,7 +163,6 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: apis/user-java
     steps:
     - name: Azure Authentication
       uses: azure/login@v1
