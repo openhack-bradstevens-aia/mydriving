@@ -57,5 +57,4 @@ jobs:
       with:
         app-name: 'openhack95e8pkj0trips'
         images: "superawesome2.azurecr.io/mydriveway/api-tripsgo:${{GITHUB.RUN_NUMBER}}"
-        slot-name: staging
-    
+        # slot-name: staging
