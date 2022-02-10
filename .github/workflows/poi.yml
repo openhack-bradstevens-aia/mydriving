@@ -4,6 +4,7 @@ env:
   ACR: superawesome2.azurecr.io
   STAGING_URL: https://openhack95e8pkj0poi-staging.azurewebsites.net
   PROD_URL: https://openhack95e8pkj0poi.azurewebsites.net
+  HEALTH_CHECK: api/healthcheck/poi
   RG: openhack95e8pkj0rg
   WEBAPP_NAME: openhack95e8pkj0poi
 
@@ -93,7 +94,7 @@ jobs:
       uses: jtalk/url-health-check-action@v2
       with:
         # Check the following URLs one by one sequentially
-        url: ${{ env.STAGING_URL }}
+        url: ${{ env.STAGING_URL }}/${{ env.HEALTH_CHECK }}
         # Follow redirects, or just report success on 3xx status codes
         follow-redirect: false # Optional, defaults to "false"
         # Fail this action after this many failed attempts
@@ -123,7 +124,7 @@ jobs:
       uses: jtalk/url-health-check-action@v2
       with:
         # Check the following URLs one by one sequentially
-        url: ${{ env.PROD_URL }}
+        url: ${{ env.PROD_URL }}/${{ env.HEALTH_CHECK }}
         # Follow redirects, or just report success on 3xx status codes
         follow-redirect: false # Optional, defaults to "false"
         # Fail this action after this many failed attempts
