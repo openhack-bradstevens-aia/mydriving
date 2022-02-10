@@ -71,7 +71,7 @@ jobs:
 
     - name: Swap staging to production
       run: |
-        az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot staging --target-slot production
+        az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot production --target-slot staging
       # uses: dacbd/create-issue-action@main
       # if: failure()
       # with:
@@ -102,8 +102,7 @@ jobs:
     - name: Rollback
       if: failure()
       run: |
-        az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot production --target-slot staging
-
+        az webapp deployment slot swap --name ${{ env.WEBAPP_NAME }} --resource-group ${{ env.RG }} --slot staging --target-slot production
 
     # - name: Create Issue on Failed Workflow
     #   if: failure()
