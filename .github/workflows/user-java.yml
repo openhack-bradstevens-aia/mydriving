@@ -227,7 +227,6 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: apis/user-java
     steps:
     - name: Azure Authentication
       uses: azure/login@v1
