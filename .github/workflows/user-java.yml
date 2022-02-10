@@ -59,9 +59,10 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: apis/user-java
     needs: build_and_test
     steps:
+    - uses: actions/checkout@v2
+    
     - name: Azure Authentication
       uses: azure/login@v1
       with:
