@@ -25,8 +25,6 @@ jobs:
         cache: 'npm'
     - run: npm install 
     - run: npm test
-    # # force error to force issue creation on failure
-    # # - run: exit 1
 
     - name: Login to Azure CLI
       uses: azure/login@v1
@@ -46,11 +44,7 @@ jobs:
       with:
         app-name: 'openhack95e8pkj0userprofile'
         images: "superawesome2.azurecr.io/mydriveway/api-userprofile:${{GITHUB.RUN_NUMBER}}"
-        # slot-name: staging
-    
-    # - name: Show App Service Details
-    #   run: |
-    #     az webapp config container show --resource-group openhack95e8pkj0rg --name openhack95e8pkj0userprofile
+        slot-name: staging
 
     - name: Create Issue on Failed Workflow
       if: ${{ failure() }}

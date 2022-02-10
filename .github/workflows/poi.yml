@@ -65,7 +65,7 @@ jobs:
       with:
         app-name: 'openhack95e8pkj0poi'
         images: "superawesome2.azurecr.io/mydriveway/api-poi:${{GITHUB.RUN_NUMBER}}"
-        # slot-name: staging
+        slot-name: staging
     
     - name: Show App Service Details
       run: |
