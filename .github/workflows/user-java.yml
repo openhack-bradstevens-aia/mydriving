@@ -144,6 +144,7 @@ jobs:
 
   swap_slots:
     needs: validate_staging
+    runs-on: ubuntu-latest
     steps:
     - name: Azure Authentication
       uses: azure/login@v1
@@ -169,6 +170,7 @@ jobs:
 
   validate_production:
     needs: swap_slots
+    runs-on: ubuntu-latest
     steps:
     - uses: jtalk/url-health-check-action@v2
       with:
@@ -198,8 +200,8 @@ jobs:
 
   roll_back:
     if: failure()
-    runs-on: ubuntu-latest
     needs: validate_production
+    runs-on: ubuntu-latest
     steps:
     - name: Azure Authentication
       uses: azure/login@v1
