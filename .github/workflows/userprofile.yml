@@ -13,12 +13,12 @@ on:
   push:
     branches: [ main ]
     paths:
-     - ${{ env.API_PATH }}
+     - apis/userprofile/**
      - .github/workflows/userprofile.yml
   pull_request:
     branches: [ main ]
     paths:
-      - ${{ env.API_PATH }}
+      - apis/userprofile/**
 
 jobs:
   build:
