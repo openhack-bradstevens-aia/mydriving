@@ -59,10 +59,11 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: apis/user-java
     needs: build_and_test
     steps:
     - uses: actions/checkout@v2
-    
+
     - name: Azure Authentication
       uses: azure/login@v1
       with:
@@ -74,7 +75,7 @@ jobs:
         azcliversion: 2.30.0
         inlineScript: |
           ls -la
-          az acr build --registry ${{ env.ACR }} --image "mydriveway/api-user-java:${{ github.run_number }}" --file Dockerfile ${{ env.DOCKER_PATH }}
+          az acr build --registry ${{ env.ACR }} --image "mydriveway/api-user-java:${{ github.run_number }}" --file Dockerfile .
             
     - uses: dacbd/create-issue-action@main
       if: failure()
