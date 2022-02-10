@@ -2,6 +2,7 @@ name: user-java
 
 env:
   ACR: superawesome2.azurecr.io
+  DOCKER_PATH: apis/user-java
   STAGING_URL: https://openhack95e8pkj0userjava-staging.azurewebsites.net
   PROD_URL: https://openhack95e8pkj0userjava.azurewebsites.net
   RG: openhack95e8pkj0rg
@@ -58,7 +59,6 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: apis/user-java
     needs: build_and_test
     steps:
     - name: Azure Authentication
@@ -71,8 +71,8 @@ jobs:
       with:
         azcliversion: 2.30.0
         inlineScript: |
-          pwd
-          az acr build --image "mydriveway/api-user-java:${{ github.run_number }}" --registry ${{ env.ACR }} --file Dockerfile .
+          ls -la
+          az acr build --registry ${{ env.ACR }} --image "mydriveway/api-user-java:${{ github.run_number }}" --file Dockerfile ${{ env.DOCKER_PATH }}
             
     - uses: dacbd/create-issue-action@main
       if: failure()
