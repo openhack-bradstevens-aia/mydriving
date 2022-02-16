@@ -1,12 +1,12 @@
 name: poi
 
 env:
-  ACR: superawesome2.azurecr.io
-  STAGING_URL: https://openhack95e8pkj0poi-staging.azurewebsites.net
-  PROD_URL: https://openhack95e8pkj0poi.azurewebsites.net
+  ACR: openhackqj13fpm0acr.azurecr.io
+  STAGING_URL: https://openhackqj13fpm0poi-staging.azurewebsites.net
+  PROD_URL: https://openhackqj13fpm0poi.azurewebsites.net
   HEALTH_CHECK: api/healthcheck/poi
-  RG: openhack95e8pkj0rg
-  WEBAPP_NAME: openhack95e8pkj0poi
+  RG: openhackqj13fpm0rg
+  WEBAPP_NAME: openhackqj13fpm0poi
 
 on:
   push:
@@ -59,14 +59,14 @@ jobs:
           status -        `${{ job.status }}`
 
     - name: Docker Login
-      run: docker login superawesome2.azurecr.io --username=${{SECRETS.CONTAINER_USER}} --password=${{SECRETS.CONTAINER_SECRET}}
+      run: docker login openhackqj13fpm0acr.azurecr.io --username=${{SECRETS.CONTAINER_USER}} --password=${{SECRETS.CONTAINER_SECRET}}
     
     - name: Docker build
       working-directory: apis/poi/web
-      run: docker build -t superawesome2.azurecr.io/mydriveway/api-poi:${{github.run_number}} .
+      run: docker build -t openhackqj13fpm0acr.azurecr.io/mydriveway/api-poi:${{github.run_number}} .
       
     - name: Docker push
-      run: docker push superawesome2.azurecr.io/mydriveway/api-poi:${{github.run_number}}
+      run: docker push openhackqj13fpm0acr.azurecr.io/mydriveway/api-poi:${{github.run_number}}
 
     - name: .NET Test
       run: dotnet test --no-restore --verbosity normal apis/poi/tests/UnitTests  /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov

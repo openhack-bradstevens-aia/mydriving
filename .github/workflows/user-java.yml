@@ -1,12 +1,12 @@
 name: user-java
 
 env:
-  ACR: superawesome2.azurecr.io
+  ACR: openhackqj13fpm0acr.azurecr.io
   DOCKER_PATH: apis/user-java/.
-  STAGING_URL: https://openhack95e8pkj0userjava-staging.azurewebsites.net
-  PROD_URL: https://openhack95e8pkj0userjava.azurewebsites.net
-  RG: openhack95e8pkj0rg
-  WEBAPP_NAME: openhack95e8pkj0userjava
+  STAGING_URL: https://openhackqj13fpm0userjava-staging.azurewebsites.net
+  PROD_URL: https://openhackqj13fpm0userjava.azurewebsites.net
+  RG: openhackqj13fpm0rg
+  WEBAPP_NAME: openhackqj13fpm0userjava
 
 on:
   push:
