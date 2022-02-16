@@ -14,10 +14,10 @@ on:
     paths:
       - apis/userprofile/**
       - .github/workflows/userprofile.yml
-  pull_request:
-    branches: [ main ]
-    paths:
-      - apis/userprofile/**
+  # pull_request:
+  #   branches: [ main ]
+  #   paths:
+  #     - apis/userprofile/**
 
 jobs:
   build:

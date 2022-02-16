@@ -15,10 +15,10 @@ on:
     paths:
       - apis/trips/**
       - .github/workflows/tripsgo.yml
-  pull_request:
-    branches: [ main ]
-    paths:
-      - apis/trips/**
+  # pull_request:
+  #   branches: [ main ]
+  #   paths:
+  #     - apis/trips/**
 
 jobs:
 
