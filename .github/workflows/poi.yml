@@ -17,8 +17,8 @@ on:
       - .github/workflows/poi.yml
 
   pull_request:
-    branches:
-      - '*'
+  pull_request:
+    branches: [ main ]
     paths:
       - apis/poi/**
 
