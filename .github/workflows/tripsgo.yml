@@ -13,8 +13,8 @@ on:
   push:
     branches: [ main ]
     paths:
-     - apis/trips/**
-     - .github/workflows/tripsgo.yml
+      - apis/trips/**
+      - .github/workflows/tripsgo.yml
   pull_request:
     branches: [ main ]
     paths:
