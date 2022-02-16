@@ -14,10 +14,10 @@ on:
     paths:
       - apis/user-java/**
       - .github/workflows/user-java.yml
-  # pull_request:
-  #   branches: [ main ]
-  #   paths:
-  #     - apis/user-java/**
+  pull_request:
+    branches: [ main ]
+    paths:
+      - apis/user-java/**
 
 jobs:
   build_and_test:
