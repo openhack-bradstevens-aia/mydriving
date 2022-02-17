@@ -75,6 +75,7 @@ jobs:
           Workflow name - `${{ github.workflow }}`
           Job -           `${{ github.job }}`
           status -        `${{ job.status }}`
+          
     - name: Validate Staging
       uses: jtalk/url-health-check-action@v2
       with:
